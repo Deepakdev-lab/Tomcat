@@ -1,0 +1,26 @@
+- hosts: all
+  remote_user: ubuntu
+  become: yes
+  tasks:
+  - name: Upgrade all packages to the latest version
+    apt:
+      name: "*"
+      state: latest
+  - name: Install latest version of "openjdk-11-jdk" ignoring "install-recommends"
+    apt:
+      name: openjdk-11-jdk
+      state: latest
+      install_recommends: no
+  - name: Download tomcat
+    get_url:
+      url: https://apachemirror.wuchna.com/tomcat/tomcat-9/v9.0.45/bin/apache-tomcat-9.0.45.tar.gz
+      dest: /opt
+      mode: 0777
+  - name: Extract tomcat archived file
+    unarchive:
+      src: /opt/apachemirror.wuchna.com/tomcat/tomcat-9/v9.0.45/bin/apache-tomcat-9.0.45.tar.gz
+      dest: /opt
+      remote_src: yes
+      mode: 0777
+  - name: Start tomcat by executing shell(startup.sh)
+    shell: nohup /opt/apache-tomcat-9.0.45/bin/startup.sh &
