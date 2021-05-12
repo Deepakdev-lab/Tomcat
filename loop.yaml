@@ -1,0 +1,13 @@
+- hosts: all
+  remote_user: ubuntu
+  become: yes
+  tasks:
+  - name: To install three softwares
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+    - mysql
+    - openjdk-11-jdk
+    - ansible
+
