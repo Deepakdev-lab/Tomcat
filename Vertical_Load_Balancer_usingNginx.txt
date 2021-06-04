@@ -22,3 +22,27 @@
 	
 	
 	
+	
+-- Horizontal clustering using http server (NGINX)
+
+1. Configure atleast 2 server (i.e., IP1, and IP2) for and install tomcat as usual.
+
+2. Download Nginx from chrom (just like tomcat) in seperate machine
+
+3.  Go to location :
+	nginx(mainfolder) --> conf, open "nginx.conf"
+4. Add below block in "nginx.conf" :
+		
+	http{
+		upstream <upstream_name>{
+			server <ipaddress1>:Portnumber;
+			server <ipaddress2>:Portnumber;
+			}
+
+5. Map the above upstream as below in "nginx.conf" :
+	
+	location / {
+	     proxy_pass http://<upstream_name>
+
+6. go to nginx (mainfolder) --> start "nginx.exe"		
+	
