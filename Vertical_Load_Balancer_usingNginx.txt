@@ -13,7 +13,7 @@
 
 			}
 
-4. Map the above upstream to location as below in "nginx.conf" :
+4. Map the above upstream as below in "nginx.conf" :
 	
 	location / {
 	     proxy_pass http://<upstream_name>
