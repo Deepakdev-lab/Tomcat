@@ -1,0 +1,24 @@
+-- Vertical clustering using http server (NGINX)
+
+1. Download Nginx from chrom (just like tomcat)
+2.  Go to location :
+	nginx(mainfolder) --> conf, open "nginx.conf"
+3. Add below block in "nginx.conf" :
+		
+	http{
+		upstream <upstream_name>{
+			server <ipaddress>:Portnumber1
+			server <ipaddress>:Portnumber2
+			server <ipaddress>:Portnumber3
+
+			}
+
+4. Map the above upstream to location as below in "nginx.conf" :
+	
+	location / {
+	     proxy_pass http://<upstream_name>
+
+5. go to nginx (mainfolder) --> start "nginx.exe"		
+	
+	
+	
