@@ -7,9 +7,9 @@
 		
 	http{
 		upstream <upstream_name>{
-			server <ipaddress>:Portnumber1
-			server <ipaddress>:Portnumber2
-			server <ipaddress>:Portnumber3
+			server <ipaddress>:Portnumber1;
+			server <ipaddress>:Portnumber2;
+			server <ipaddress>:Portnumber3;
 
 			}
 
