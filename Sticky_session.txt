@@ -1,0 +1,129 @@
+(Using only cluster will give session inconsistency)
+
+Two methods used to control session inconsistency
+
+1. --Sticky session 
+
+- When user connects to one IP1, he will be directed to IP1 only. It will not route to IP2 using sticky session.
+
+Draw Back:
+	If IP1 goes down data's stored in the session will be lost.
+
+
+- How to configure for NGINX LB:  (Just need to add "ip_hash;" below server list in "nginx.conf" file)
+
+	http{
+		upstream <upstream_name>{
+			server <ipaddress>:Portnumber1
+			server <ipaddress>:Portnumber2
+			server <ipaddress>:Portnumber3
+			ip_hash;          
+
+			}
+
+
+- How to configure for Appache LB : (While configuring LB by default sticky session are configured)
+
+- How sticky sessions are by default created?
+  WHile configuring Apache LB "JVMroute" is added that helps in sticky session.
+
+
+
+2. Session Replication
+
+	a. Standard Manager : Whole object is replicate in all nodes(all ip addresses)
+	b. Persistent manager : saves data in file/databases and allows each node to access the file to use the latest node change.
+	c. Delta Manager : Only replicates the updated data.   (preferred)
+	d. Backup manager : few nodes are made backup to hold deltas.
+
+	just concept:
+	
+	Unicast --> one to one
+	Broadcast --> one to Many
+	Multicast --> Many to Many
+
+Configuration :
+	
+1. Add a tag (big script) under engine line (JVMRoute) in tomcate (server.xml).  note: in big script, no need to change port if its Horizontal cluster.
+
+2. Add "<distributable/>" in the "web.xml" file inside the application folder (eg Demoapp--> WEB_INF --> web.xml) which you want to set session replication.
+	
+	<distributable/>			# add at bottom above </web-app>
+     </web-app> 
+		
+
+
+
+
+
+
+
+
+
+-- JNDI
+
+Its a Key- value concept
+
+For eg:
+
+In application we dont need to save all the info about database, instead we wll store DB server name as KEY, and using that we will get the VALUE. 
+i.e., DB names, host names etc.
+
+
+
+
+-- Connection pooling
+
+Without Connection pooling 
+
+Architecture 
+
+User1  --> Query(wants to get data from database)   --> connection creates  --> Access the databases  --> gives the output
+
+User2 --> Query (wants to get same data as of User1) --> connection will wait as user1 connection is active.
+
+Hence Time consuming, and performance impacting
+
+
+With Connection Pooling,
+
+we will create a pool and architecture as below:
+
+User1 --> Query(wants to get data from database) --> connection creates in POOL  --> Access the databases  --> gives the output
+
+User2 --> Query(wants to get same data from database) --> connection already created in POOL uses it  --> Access the databases  --> gives the output
+
+
+How to configre Connection pooling
+
+1. Tomcat (mainfolder) --> conf -->context.xml
+	
+--add Resource tag (acts as KEY) as below in "context.xml"
+
+	<Resource
+	name=<keyname>    #dbname
+	auth=
+	type=
+	maxActive="1000"   #maximum pool connection
+	maxIdle="300"  #minimum pool connection
+	:
+	:
+	:
+	:
+	/>
+
+2.  Application folder(eg. Demoapp) --> WEB_INF --> web.xml
+
+-- add resource-ref (acts as VALUE) as below in "web.xml".
+
+ 	<resource-ref>
+	:
+	<res-ref-name> <keyname> </red-ref-name>
+	:
+	:
+	:
+       etc
+
+
+
+
